@@ -1,0 +1,48 @@
+{% extends "quotes/base.html" %}
+
+{% block content %}
+<h1>Quotes {% if filter_tag %} tagged "{{ filter_tag }}" {% endif %}</h1>
+
+<ul class="list-group mb-3">
+    {% for quote in quotes %}
+    <li class="list-group-item">
+        "{{ quote.text }}" — <a href="{% url 'author-detail' quote.author.pk %}">{{ quote.author.name }}</a>
+        <br>
+        Tags:
+        {% for tag in quote.tags.all %}
+            <a href="{% url 'tag-quotes' tag.name %}">{{ tag.name }}</a>{% if not forloop.last %}, {% endif %}
+        {% empty %}
+            No tags
+        {% endfor %}
+    </li>
+    {% empty %}
+    <li class="list-group-item">No quotes found.</li>
+    {% endfor %}
+</ul>
+
+<nav>
+  <ul class="pagination">
+    {% if page_obj.has_previous %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Previous</span></li>
+    {% endif %}
+
+    <li class="page-item disabled"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>
+
+    {% if page_obj.has_next %}
+      <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link">Next</span></li>
+    {% endif %}
+  </ul>
+</nav>
+
+<h2>Top Ten Tags</h2>
+<ul>
+  {% for tag, count in top_tags %}
+    <li><a href="{% url 'tag-quotes' tag.name %}">{{ tag.name }}</a> ({{ count }})</li>
+  {% endfor %}
+</ul>
+
+{% endblock %}

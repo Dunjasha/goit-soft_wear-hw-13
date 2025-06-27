@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Quotes</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand navbar-light bg-light">
+  <a class="navbar-brand" href="{% url 'quote-list' %}">Quotes</a>
+  <ul class="navbar-nav ms-auto">
+    {% if user.is_authenticated %}
+      <li class="nav-item"><a class="nav-link" href="{% url 'add-author' %}">Add Author</a></li>
+      <li class="nav-item"><a class="nav-link" href="{% url 'add-quote' %}">Add Quote</a></li>
+      <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+    {% else %}
+      <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Login</a></li>
+    {% endif %}
+  </ul>
+</nav>
+<div class="container mt-4">
+    {% block content %}
+    {% endblock %}
+</div>
+</body>
+</html>
